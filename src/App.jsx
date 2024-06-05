@@ -31,6 +31,18 @@ const App = () => {
     }
   };
 
+  const handleFavoriteClick = (photo) => {
+    if (isFavorite(photo)) {
+      removeFavorite(photo);
+    } else {
+      addFavorite(photo);
+    }
+    document.getElementById(`heart-${photo.id}`).classList.add('animate-like');
+    setTimeout(() => {
+      document.getElementById(`heart-${photo.id}`).classList.remove('animate-like');
+    }, 300);
+  };
+
   return (
     <Router>
       <Header />
@@ -40,13 +52,13 @@ const App = () => {
             path="/"
             element={
               <>
-                <h1><b>SELECCIONA TUS FOTOS FAVORITAS</b></h1>
+                <h1>BUSCA TUS FOTOGRAFIAS FAVORITAS</h1>
                 <form onSubmit={handleSearch}>
                   <input
                     type="text"
                     value={state.query}
                     onChange={(e) => setState({ ...state, query: e.target.value })}
-                    placeholder="Ingresa tu Busqueda ... "
+                    placeholder="Ingresa tu busqueda ... "
                   />
                   <button type="submit">Buscar</button>
                 </form>
@@ -55,7 +67,10 @@ const App = () => {
                     <div key={photo.id} className="photo">
                       <img src={photo.src.medium} alt={photo.photographer} />
                       <p>{photo.photographer}</p>
-                      <button onClick={() => (isFavorite(photo) ? removeFavorite(photo) : addFavorite(photo))}>
+                      <button
+                        id={`heart-${photo.id}`}
+                        onClick={() => handleFavoriteClick(photo)}
+                      >
                         {isFavorite(photo) ? '❤️' : '♡'}
                       </button>
                     </div>
